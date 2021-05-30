@@ -24,7 +24,8 @@ class Connector {
               Center(child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator(value: null, strokeWidth: 10))),
               Container(margin: EdgeInsets.only(top: 20), child: Center(child: Text("Please wait", style: TextStyle(color: Colors.white))))
             ],
-          )),
+          ),
+        ),
       );
     });
   }
@@ -34,12 +35,10 @@ class Connector {
   }
 
   void connectToServer(Function callback) async {
-    final host = Platform.isAndroid ? "10.0.2.2" : "127.0.0.1";
+    final host = Platform.isAndroid ? "10.0.2.2" : "127.0.0.1";    // localhost
     print("Connecting to $host:8080...");
     _socket = await SocketIOManager().createInstance(SocketOptions("http://$host:8080"));
-    _socket.onConnect.listen((event) {
-      print("Connected: $event");
-    });
+    _socket.onConnect.listen((event) => print("Connected: $event"));
     _socket.on("newUser").listen((event) => newUser(event));
     _socket.on("created").listen((event) => created(event));
     _socket.on("closed").listen((event) => closed(event));
